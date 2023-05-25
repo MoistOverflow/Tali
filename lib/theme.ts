@@ -1,17 +1,30 @@
-export const darkTheme = {
+export type Theme = {
+    name: string;
+    text: string,
+    background: string,
+    primary: string,
+    secondary: string,
+    accent: string,
+    statusbar: 'light' | 'dark',
+}
+
+export const darkTheme: Theme = {
+    name: 'dark',
     text: "#edecf3",
     background: "#0f0e16",
     primary: "#60496f",
     secondary: "#1f141e",
     accent: "#31202f",
-    statusbar: "light",
+    statusbar: 'light',
 }
 
-export const lightTheme = {
+export const lightTheme: Theme = {
+    name: 'light',
     text: "#0e1b17",
     background: "#e1efea",
     primary: "#519e85",
     secondary: "#ebf5f1",
     accent: "#5dac92",
-    statusbar: "dark",
+    statusbar: 'dark',
 }
+
