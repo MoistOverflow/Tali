@@ -1,5 +1,5 @@
 import { Link } from "react-router-native";
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Platform } from 'react-native';
 import { MaterialIcons, FontAwesome5, Entypo, Ionicons } from '@expo/vector-icons';
 
 export default function Navbar({theme}:any){
@@ -36,6 +36,7 @@ const style = (theme:any) => {
             marginTop: "auto",
             flexDirection: 'row',
             width: '100%',
+            marginBottom: (Platform.OS== 'ios')?20:0,
         },
         navButton: {
             height: 60,
