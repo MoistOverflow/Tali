@@ -48,6 +48,10 @@ export default function App() {
       const themeMode = await findThemeMode();
       setTheme(theme);
       setThemeMode(themeMode);
+      Appearance.addChangeListener(({ colorScheme }) => {
+        const theme = (colorScheme === 'dark') ? dark : light;
+        setTheme(theme);
+      })
     }
     fetchData()
   }, []);
