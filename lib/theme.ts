@@ -8,7 +8,7 @@ export type Theme = {
     statusbar: 'light' | 'dark',
 }
 
-export const darkTheme: Theme = {
+export const dark: Theme = {
     name: 'dark',
     text: "#edecf3",
     background: "#0f0e16",
@@ -18,7 +18,7 @@ export const darkTheme: Theme = {
     statusbar: 'light',
 }
 
-export const lightTheme: Theme = {
+export const light: Theme = {
     name: 'light',
     text: "#0e1b17",
     background: "#e1efea",
