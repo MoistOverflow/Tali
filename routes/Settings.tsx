@@ -18,16 +18,18 @@ export default function Settings({theme, changeTheme, themeMode}:any){
 
     return (
         <View style={style(theme).container}>
-            <Text style={style(theme).text}>Theme:</Text>
-            <DropDownPicker
-                open={open}
-                value={value}
-                items={items}
-                setOpen={setOpen}
-                setValue={setValue}
-                setItems={setItems}
-                style={style(theme).dropdown}
-            />
+            <View style={style(theme).row}>
+                <Text style={style(theme).text}>Choose Theme: </Text>
+                <DropDownPicker
+                    open={open}
+                    value={value}
+                    items={items}
+                    setOpen={setOpen}
+                    setValue={setValue}
+                    setItems={setItems}
+                    style={style(theme).dropdown}
+                />
+            </View>
         </View>
     )
 }
@@ -39,10 +41,18 @@ const style = (theme:any) => {
         },
         text: {
             color: theme.text,
+            width: '40%',
+            marginLeft: '20%',
+            padding: 10,
         },
         dropdown: {
             backgroundColor: theme.primary,
             color: theme.text,
-        }
+            width: '35%',
+        },
+        row: {
+            flexDirection: 'row',
+            width: '100%',
+        },
     });
 }
