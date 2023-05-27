@@ -1,12 +1,12 @@
 import { StyleSheet, Text, View} from 'react-native';
 
-export default function Button({ title='', theme={}, onPress, eStyle={} }:any){
+export default function Button({ title='', theme={}, onPress, style={} }:any){
     return (
-        <Text onPress={onPress} style={{...style(theme).button, ...eStyle}}>{title}</Text>
+        <Text onPress={onPress} style={{...cstyle(theme).button, ...style}}>{title}</Text>
     )
 }
 
-const style = (theme:any) => {
+const cstyle = (theme:any) => {
     return StyleSheet.create({
         container: {
         },
