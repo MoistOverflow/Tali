@@ -7,10 +7,12 @@ import Movies from './routes/Movies';
 import Shows from './routes/Shows';
 import Other from './routes/Other';
 import Settings from './routes/Settings';
-import {dark, light} from './lib/theme';
+import OtherCat from './routes/OtherCat';
+import {dark, light, solorizedDark, oled} from './lib/theme';
 import { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import TitleBar from './components/TitleBar';
+import db from './lib/client';
 
 const findTheme = async () => {
   const theme = await AsyncStorage.getItem('theme');
@@ -18,6 +20,10 @@ const findTheme = async () => {
     return dark;
   } else if(theme === 'light') {
     return light;
+  } else if(theme === 'solorizedDark') {
+    return solorizedDark;
+  } else if(theme === 'oled') {
+    return oled;
   } else {
     const system = Appearance.getColorScheme();
     if (system === 'dark') {
@@ -41,6 +47,14 @@ export default function App() {
   let [theme, setTheme] = useState(light);
   let [themeMode, setThemeMode] = useState('auto');
   let [title, setTitle] = useState('Home');
+  let [showBack, setShowBack] = useState('');
+  const [movies, setMovies] = useState([]);
+  const [shows, setShows] = useState([]);
+  const [selCat, setSelCat] = useState({});
+  const [otherCategories, setOtherCategories] = useState([]);
+  const [other, setOther] = useState([]);
+
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -52,6 +66,18 @@ export default function App() {
         const theme = (colorScheme === 'dark') ? dark : light;
         setTheme(theme);
       })
+      const movies = await db.from('movies').select().eq();
+      if (movies.data) {
+        setMovies(movies.data);
+      }
+      const shows = await db.from('shows').select().eq();
+      if (shows.data) {
+        setShows(shows.data);
+      }
+      const otherCategories = await db.from('categories').select().eq();
+      if (otherCategories.data) {
+        setOtherCategories(otherCategories.data);
+      }
     }
     fetchData()
   }, []);
@@ -68,6 +94,16 @@ export default function App() {
         setTheme(light);
         await AsyncStorage.setItem('theme', 'light');
         break;
+      case 'solorizedDark':
+        setThemeMode('solorizedDark');
+        setTheme(solorizedDark);
+        await AsyncStorage.setItem('theme', 'solorizedDark');
+        break;
+      case 'oled':
+        setThemeMode('oled');
+        setTheme(oled);
+        await AsyncStorage.setItem('theme', 'oled');
+        break;
       default:
         setThemeMode('auto');
         const system = Appearance.getColorScheme();
@@ -80,18 +116,28 @@ export default function App() {
         break;
     }
   }
+
+  const clearAll = async () => {
+    await AsyncStorage.clear();
+    setMovies([]);
+    setShows([]);
+    setOtherCategories([]);
+    setOther([]);
+  }
+
   return (
     <View style={{...styles.mainContainer, backgroundColor: theme.background}}>
-      <TitleBar title={title} theme={theme}/>
       <NativeRouter>
+      <TitleBar title={title} theme={theme} showBack={showBack} setShowBack={setShowBack} setTitle={setTitle}/>
           <Routes>
             <Route path="/" element={<Home theme={theme}/>}/>
-            <Route path="/movies" element={<Movies theme={theme}/>} />
-            <Route path="/shows" element={<Shows theme={theme}/>} />
-            <Route path="/other" element={<Other theme={theme}/>} />
-            <Route path="/settings" element={<Settings theme={theme} changeTheme={changeTheme} themeMode={themeMode}/>} />
+            <Route path="/movies" element={<Movies theme={theme} movies={movies} setMovies={setMovies} />} />
+            <Route path="/shows" element={<Shows theme={theme} shows={shows} setShows={setShows}/>}/>
+            <Route path="/categories" element={<OtherCat theme={theme} otherCategories={otherCategories} setOtherCategories={setOtherCategories} setSelCat={setSelCat} setShowBack={setShowBack} setTitle={setTitle}/>} />
+            <Route path="/other" element={<Other theme={theme} selCat={selCat} other={other} setOther={setOther}/>} />
+            <Route path="/settings" element={<Settings theme={theme} changeTheme={changeTheme} themeMode={themeMode} clearAll={clearAll}/>} />
           </Routes>
-          <Navbar theme={theme} setTitle={setTitle}/>
+          <Navbar theme={theme} setTitle={setTitle} setShowBack={setShowBack}/>
           <StatusBar style={theme.statusbar} />
       </NativeRouter>
     </View>
