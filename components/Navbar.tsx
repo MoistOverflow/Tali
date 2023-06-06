@@ -2,22 +2,22 @@ import { Link } from "react-router-native";
 import { StyleSheet, Text, View, Platform } from 'react-native';
 import { MaterialIcons, FontAwesome5, Entypo, Ionicons } from '@expo/vector-icons';
 
-export default function Navbar({theme, setTitle}:any){
+export default function Navbar({theme, setTitle, setShowBack}:any){
     return (
         <View style={style(theme).navabar}>
-            <Link onPress={()=>setTitle("Home")} to="/" style={{flex: 1}}>
+            <Link onPress={()=>{setTitle("Home");setShowBack("")}} to="/" style={{flex: 1}}>
                 <Text style={style(theme).navButton}><Entypo name="home" size={24} /></Text>
             </Link>
-            <Link onPress={()=>setTitle("Movies")} to='/movies' style={{flex: 1}}>
+            <Link onPress={()=>{setTitle("Movies");setShowBack("")}} to='/movies' style={{flex: 1}}>
                 <Text style={style(theme).navButton}><MaterialIcons name="movie" size={24} /></Text>
             </Link>
-            <Link onPress={()=>setTitle("Shows")} to='/shows' style={{flex: 1}}>
+            <Link onPress={()=>{setTitle("Shows");setShowBack("")}} to='/shows' style={{flex: 1}}>
                 <Text style={style(theme).navButton}><Entypo name="tv" size={24} /></Text>
             </Link>
-            <Link onPress={()=>setTitle("Other")} to='/other' style={{flex: 1}}>
+            <Link onPress={()=>{setTitle("Categories");setShowBack("")}} to='/Categories' style={{flex: 1}}>
                 <Text style={style(theme).navButton}><FontAwesome5 name="dice-d6" size={24} /></Text>
             </Link>
-            <Link onPress={()=>setTitle("Settings")} to='/settings' style={{flex: 1}}>
+            <Link onPress={()=>{setTitle("Settings");setShowBack("")}} to='/settings' style={{flex: 1}}>
                 <Text style={style(theme).navButton}><Ionicons name="settings" size={24} /></Text>
             </Link>
         </View>
