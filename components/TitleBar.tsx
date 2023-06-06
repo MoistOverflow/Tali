@@ -1,9 +1,14 @@
 import { StyleSheet, Text, View} from 'react-native';
+import { AntDesign, Ionicons } from '@expo/vector-icons';
+import { Link } from "react-router-native";
 
-export default function TitleBar({ title='', theme={} }:any){
+export default function TitleBar({ title='', theme={} , showBack="", setShowBack, setTitle}:any){
+    const st = style(theme);
     return (
         <View style={style(theme).container}>
-            <Text style={style(theme).text}>{title}</Text>
+            {showBack ? <Link onPress={()=>{setTitle(showBack);setShowBack("")}} to={`/${showBack}`}><Text style={st.back}><Ionicons name="chevron-back" size={16} />{showBack}</Text></Link> : null}
+            <Text style={st.title}>{title}</Text>
+            {showBack ? <Link><Text style={{...st.back, ...st.hidden}}><Ionicons name="chevron-back" size={16} />{showBack}</Text></Link> : null}
         </View>
     )
 }
@@ -22,11 +27,29 @@ const style = (theme:any) => {
             shadowOpacity: 0.2,
             shadowRadius: 3,
             elevation: 20,
+            flexDirection: 'row',
         },
-        text: {
+        title: {
             color: theme.text,
             fontWeight: 'bold',
             fontSize: 20,
+            textAlign: 'center',
+            flex: 1,
+            textTransform: 'capitalize',
+        },
+        back: {
+            marginTop: 6,
+            color: theme.text,
+            fontSize: 16,
+            fontWeight: '400',
+            textAlign: 'left',
+            marginLeft:0,
+            marginRight:0,
+            padding: 0,
+            flex: 1,
+        },
+        hidden: {
+            opacity: 0,
         },
     });
 }
