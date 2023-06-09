@@ -46,13 +46,24 @@ export type Show = z.infer<typeof ShowSchema>;
 export const ShowsSchema = z.array(ShowSchema);
 export type Shows = z.infer<typeof ShowsSchema>;
 
+export const PreSubmitOtherSchema = z.object({
+    title: z.string().min(1).max(255),
+    notes: z.string().min(0).max(255),
+    completeState: z.number().min(0).max(2).default(0),
+    rating: z.number().min(0).max(5).default(0),
+    currentSeason: z.number().min(0).max(1000).default(0),
+    currentEpisode: z.number().min(0).max(1000).default(0),
+    category: z.number()
+}).strict();
+export type PreSubmitOther = z.infer<typeof PreSubmitOtherSchema>;
+
 export const OtherSchema = z.object({
     id: z.number(),
-    title: z.string(),
+    title: z.string().min(1).max(255),
     //conpleteState TBD = 0 | In Progress = 1 | Completed = 2
     completeState: z.number().min(0).max(2),
     rating: z.number().min(0).max(5).default(0),
-    notes: z.string().optional(),
+    notes: z.string().min(0).max(255),
     currentSeason: z.number().min(0).max(1000).default(0),
     currentEpisode: z.number().min(0).max(1000).default(0),
     category: z.number(),
