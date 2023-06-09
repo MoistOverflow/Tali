@@ -72,7 +72,7 @@ export default function Other({theme, selCat, others, setOthers, setSelCat}:any)
     }
 
     useEffect(() => {sortOthers()}, [others]);
-    useEffect(()=>{return()=>{setSelCat({id:0})}},[])
+    useEffect(()=>{return()=>{setSelCat({id:0});setOthers([])}},[])
 
     return (
         <View style={style(theme).container}>
