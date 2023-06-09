@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "ThatLooksGood",
-    "slug": "ThatLooksGood",
+    "name": "Tali",
+    "slug": "Tali",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -19,6 +19,7 @@
       "userInterfaceStyle": "automatic"
     },
     "android": {
+      "permissions":["READ_EXTERNAL_STORAGE", "WRITE_EXTERNAL_STORAGE"],
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
