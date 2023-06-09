@@ -50,9 +50,9 @@ export default function App() {
   let [showBack, setShowBack] = useState('');
   const [movies, setMovies] = useState([]);
   const [shows, setShows] = useState([]);
-  const [selCat, setSelCat] = useState({});
+  const [selCat, setSelCat] = useState({id:0});
   const [otherCategories, setOtherCategories] = useState([]);
-  const [other, setOther] = useState([]);
+  const [others, setOthers] = useState([]);
 
 
 
@@ -81,6 +81,16 @@ export default function App() {
     }
     fetchData()
   }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const other = await db.from('others').select().eq({category: selCat.id});
+      if (other.data) {
+        setOthers(other.data);
+      }
+    }
+    fetchData()
+  }, [selCat]);
   
   const changeTheme = async (mode:string ) => {
     switch(mode) {
@@ -122,19 +132,19 @@ export default function App() {
     setMovies([]);
     setShows([]);
     setOtherCategories([]);
-    setOther([]);
+    setOthers([]);
   }
 
   return (
     <View style={{...styles.mainContainer, backgroundColor: theme.background}}>
       <NativeRouter>
-      <TitleBar title={title} theme={theme} showBack={showBack} setShowBack={setShowBack} setTitle={setTitle}/>
+      <TitleBar title={title} theme={theme} showBack={showBack} setShowBack={setShowBack} setTitle={setTitle} setSelCat={setSelCat}/>
           <Routes>
             <Route path="/" element={<Home theme={theme}/>}/>
             <Route path="/movies" element={<Movies theme={theme} movies={movies} setMovies={setMovies} />} />
             <Route path="/shows" element={<Shows theme={theme} shows={shows} setShows={setShows}/>}/>
-            <Route path="/categories" element={<OtherCat theme={theme} otherCategories={otherCategories} setOtherCategories={setOtherCategories} setSelCat={setSelCat} setShowBack={setShowBack} setTitle={setTitle}/>} />
-            <Route path="/other" element={<Other theme={theme} selCat={selCat} other={other} setOther={setOther}/>} />
+            <Route path="/categories" element={<OtherCat theme={theme} otherCategories={otherCategories} setOtherCategories={setOtherCategories} setSelCat={setSelCat} setShowBack={setShowBack} setTitle={setTitle} setOthers={setOthers}/>} />
+            <Route path="/other" element={<Other theme={theme} selCat={selCat} others={others} setOthers={setOthers} setSelCat={setSelCat}/>} />
             <Route path="/settings" element={<Settings theme={theme} changeTheme={changeTheme} themeMode={themeMode} clearAll={clearAll}/>} />
           </Routes>
           <Navbar theme={theme} setTitle={setTitle} setShowBack={setShowBack}/>
