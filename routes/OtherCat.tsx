@@ -9,7 +9,7 @@ export default function OtherCat({theme, otherCategories, setOtherCategories, se
     const [newCat, setNewCat]:any = useState({id: 0, title: '', showEpisodes: false});
     const [editPop, setEditPop] = useState(false);
     const [catSorted, setCatSorted] = useState(otherCategories);
-    //sort aplhabetically using a.title and b.title in a useEffect
+    
     useEffect(()=>{
         setCatSorted(otherCategories.sort((a:any, b:any) => a.title.localeCompare(b.title)))
     },[otherCategories])
@@ -106,7 +106,7 @@ export default function OtherCat({theme, otherCategories, setOtherCategories, se
                             <Text style={st.switchText}>Show season and episode tracker: </Text>
                             <Switch style={st.switch} onValueChange={handleCheck} value={newCat.showEpisodes}/>
                         </View>
-                        {(editPop)?<Text style={st.delete} onLongPress={handleDelete}>DELETE</Text>:null}
+                        {(editPop)?<Text style={st.delete} onLongPress={handleDelete}>long press to delete</Text>:null}
                     </View>
                 </View>
             </Modal>
