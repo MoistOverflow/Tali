@@ -6,17 +6,34 @@ import db from '../lib/client'
 
 export default function OtherCat({theme, otherCategories, setOtherCategories, setSelCat, setShowBack, setTitle}:any){
     const [modalVisible, setModalVisible] = useState(false);
-    const [newCat, setNewCat] = useState({title: '', showEpisodes: false});
+    const [newCat, setNewCat]:any = useState({id: 0, title: '', showEpisodes: false});
+    const [editPop, setEditPop] = useState(false);
+    const [catSorted, setCatSorted] = useState(otherCategories);
+    //sort aplhabetically using a.title and b.title in a useEffect
+    useEffect(()=>{
+        setCatSorted(otherCategories.sort((a:any, b:any) => a.title.localeCompare(b.title)))
+    },[otherCategories])
+    
 
     const st = style(theme);
 
 
     const submit = async () => {
-        const res = await db.from('categories').insert(newCat);
-        if (res.data) {
-            setOtherCategories([...otherCategories, res.data])
-            setModalVisible(false);
-            setNewCat({title: '', showEpisodes: false});
+        if (!editPop){
+            const res = await db.from('categories').insert(newCat);
+            if (res.data) {
+                setOtherCategories([...otherCategories, res.data])
+                setModalVisible(false);
+                setNewCat({title: '', showEpisodes: false});
+            }
+        }else {
+            const res = await db.from('categories').update(newCat).eq({id: newCat.id});
+            if (res.data) {
+                const updatedList = [...otherCategories.filter((cat:any) => cat.id !== newCat.id), newCat]
+                setOtherCategories(updatedList)
+                setModalVisible(false);
+                setNewCat({title: '', showEpisodes: false});
+            }
         }
     }
 
@@ -28,16 +45,43 @@ export default function OtherCat({theme, otherCategories, setOtherCategories, se
         setNewCat((current:any)=>{return {...current, showEpisodes: !current.showEpisodes}})
     }
 
+    const handleAddNew = () => {
+        setNewCat({title: '', showEpisodes: false});
+        setEditPop(false);
+        setModalVisible(true);
+    }
+
+    const handleEdit = (cat:any) => {
+        setNewCat(cat);
+        setEditPop(true);
+        setModalVisible(true);
+    }
+
+    const handleDelete = async () => {
+        const res = await db.from('categories').delete().eq({id: newCat.id});
+        if (res.data) {
+            setOtherCategories([...otherCategories.filter((c:any) => c.id !== newCat.id)])
+        }
+        setModalVisible(false);
+        setNewCat({title: '', showEpisodes: false});
+        setEditPop(false);
+    }
+
     return (
         <View style={st.container}>
-            <TouchableOpacity onPress={()=>setModalVisible(true)}>
+            <TouchableOpacity onPress={handleAddNew}>
                 <Text style={st.add}>ADD NEW CATEGORY</Text>
             </TouchableOpacity>
             <ScrollView>
-                {otherCategories.map((cat:any) => {
+                {catSorted.map((cat:any) => {
                     return (
                         <Link onPress={()=>{setShowBack('categories');setSelCat(cat); setTitle(cat.title);}} to='/other' style={st.category} key={cat.id}>
-                            <Text style={st.text}>{cat.title}</Text>
+                            <View style={st.row}>
+                                <Text style={{...st.text, flex:1, textAlign: 'center', fontSize: 20}}>{cat.title}</Text>
+                                <TouchableOpacity style={{padding:10}} onPress={()=>handleEdit(cat)}>
+                                    <AntDesign style={st.text} name="edit" size={16} />
+                                </TouchableOpacity>
+                            </View>
                         </Link>
                     )
                 })}
@@ -51,7 +95,7 @@ export default function OtherCat({theme, otherCategories, setOtherCategories, se
                     <View style={st.modalView}>
                         <View style={st.row}>
                             <Text style={st.modalBack} onPress={()=>setModalVisible(false)}><Ionicons name="chevron-back" size={20} /></Text>
-                            <Text style={st.modalTitle} >Add Movie</Text>
+                            <Text style={st.modalTitle} >{(editPop)?'Edit':'Add'} Movie</Text>
                             <Text style={st.modalSubmit} onPress={submit}>SUBMIT</Text>
                         </View>
                         <View style={st.row}>
@@ -62,6 +106,7 @@ export default function OtherCat({theme, otherCategories, setOtherCategories, se
                             <Text style={st.switchText}>Show season and episode tracker: </Text>
                             <Switch style={st.switch} onValueChange={handleCheck} value={newCat.showEpisodes}/>
                         </View>
+                        {(editPop)?<Text style={st.delete} onLongPress={handleDelete}>DELETE</Text>:null}
                     </View>
                 </View>
             </Modal>
@@ -78,6 +123,11 @@ const style = (theme:any) => {
         },
         text: {
             color: theme.text,
+        },
+        delete: {
+            color: 'red',
+            textAlign: 'center',
+            marginVertical: 0,
         },
         switch: {
             flex: 1,
@@ -96,9 +146,8 @@ const style = (theme:any) => {
         },
         category: {
             color: theme.text,
-            fontSize: 20,
             textAlign: 'center',
-            padding: 20,
+            padding: 14,
             borderColor: theme.accent,
             borderWidth: 1,
             justifyContent: 'center',
