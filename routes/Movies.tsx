@@ -1,9 +1,9 @@
-import { StyleSheet, Text, View, ScrollView, Modal, TextInput, Switch, TouchableOpacity} from 'react-native';
+import { StyleSheet, Text, View, ScrollView, Modal, TextInput, TouchableOpacity} from 'react-native';
 import Button from '../components/Button';
 import db from '../lib/client'
 import { useState, useEffect } from 'react';
 import { AntDesign, Ionicons } from '@expo/vector-icons';
-import { preSubmitMovieSchema, type PreSubmitMovie, MovieSchema, type Movie } from '../lib/schemas';
+import { preSubmitMovieSchema, type PreSubmitMovie, type Movie } from '../lib/schemas';
 
 
 export default function Movies({theme, movies, setMovies}:any){

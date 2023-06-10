@@ -2,10 +2,7 @@ import { StyleSheet, Text, View, Modal} from 'react-native';
 import Button from '../components/Button';
 import { useState, useEffect } from 'react';
 import DropDownPicker from 'react-native-dropdown-picker';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import RNExitApp from 'react-native-exit-app';
 import db from '../lib/client';
-import { light } from '../lib/theme';
 
 
 export default function Settings({theme, changeTheme, themeMode, clearAll}:any){
@@ -47,8 +44,8 @@ export default function Settings({theme, changeTheme, themeMode, clearAll}:any){
                         <View style={st.modalContainer}>
                             <Text style={{...st.text, margin: 10}}>Are you sure you want to delete all data?</Text>
                             <View style={st.modalButtons}>
-                                <Button theme={theme} title="No" onPress={() => setDeleteAllModal(false)} style={{width:'28%', padding:30}}/>
-                                <Button theme={theme} title="Yes" onPress={() => {clearAll();setDeleteAllModal(false)}}  style={{backgroundColor: theme.danger, width:'28%', padding:30}}/>
+                                <Button theme={theme} title="No" onPress={() => setDeleteAllModal(false)} style={{padding:30}}/>
+                                <Button theme={theme} title="Yes" onPress={() => {clearAll();setDeleteAllModal(false)}}  style={{backgroundColor: theme.danger, padding:30}}/>
                             </View>
                         </View>
                     </View>

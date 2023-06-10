@@ -1,9 +1,9 @@
-import { StyleSheet, Text, View, ScrollView, Modal, TextInput, Switch, TouchableOpacity} from 'react-native';
+import { StyleSheet, Text, View, ScrollView, Modal, TextInput, TouchableOpacity} from 'react-native';
 import Button from '../components/Button';
 import db from '../lib/client'
 import { useState, useEffect } from 'react';
 import { AntDesign, Ionicons } from '@expo/vector-icons';
-import { OtherSchema, PreSubmitOtherSchema, type Other, type PreSubmitOther } from '../lib/schemas';
+import {PreSubmitOtherSchema, type Other, type PreSubmitOther } from '../lib/schemas';
 
 
 export default function Other({theme, selCat, others, setOthers, setSelCat}:any){
