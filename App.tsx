@@ -135,6 +135,25 @@ export default function App() {
     setOthers([]);
   }
 
+  const resyncData = async () => {
+    const movies = await db.from('movies').select().eq();
+    if (movies.data) {
+      setMovies(movies.data);
+    }
+    const shows = await db.from('shows').select().eq();
+    if (shows.data) {
+      setShows(shows.data);
+    }
+    const otherCategories = await db.from('categories').select().eq();
+    if (otherCategories.data) {
+      setOtherCategories(otherCategories.data);
+    }
+    const others = await db.from('others').select().eq();
+    if (others.data) {
+      setOthers(others.data);
+    }
+  }
+
   return (
     <View style={{...styles.mainContainer, backgroundColor: theme.background}}>
       <NativeRouter>
@@ -145,7 +164,7 @@ export default function App() {
             <Route path="/shows" element={<Shows theme={theme} shows={shows} setShows={setShows}/>}/>
             <Route path="/categories" element={<OtherCat theme={theme} otherCategories={otherCategories} setOtherCategories={setOtherCategories} setSelCat={setSelCat} setShowBack={setShowBack} setTitle={setTitle} setOthers={setOthers}/>} />
             <Route path="/other" element={<Other theme={theme} selCat={selCat} others={others} setOthers={setOthers} setSelCat={setSelCat}/>} />
-            <Route path="/settings" element={<Settings theme={theme} changeTheme={changeTheme} themeMode={themeMode} clearAll={clearAll}/>} />
+            <Route path="/settings" element={<Settings theme={theme} changeTheme={changeTheme} themeMode={themeMode} clearAll={clearAll} resyncData={resyncData}/>} />
           </Routes>
           <Navbar theme={theme} setTitle={setTitle} setShowBack={setShowBack}/>
           <StatusBar style={theme.statusbar} />
