@@ -104,8 +104,8 @@ export default function Settings({theme, changeTheme, themeMode, clearAll, resyn
                 />
             </View>
             <View style={{...st.row, zIndex:0}}>
-                <Button theme={theme} title="Export Data" onPress={handleExport} style={{padding:30, flex:1}}/>
-                <Button theme={theme} title="Import Data" onPress={handleImport} style={{padding:30, flex:1}}/>
+                <Button theme={theme} title="Export" onPress={handleExport} style={{padding:30, flex:1}}/>
+                <Button theme={theme} title="Import" onPress={handleImport} style={{padding:30, flex:1}}/>
             </View>
             <View style={{...st.row, zIndex:0}}>
                 <Button theme={theme} title="Delete All Data" onPress={() => setDeleteAllModal(true)} style={{width:'100%'}}/>
