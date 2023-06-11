@@ -72,7 +72,7 @@ export default function OtherCat({theme, otherCategories, setOtherCategories, se
             <TouchableOpacity onPress={handleAddNew}>
                 <Text style={st.add}>ADD NEW CATEGORY</Text>
             </TouchableOpacity>
-            <ScrollView>
+            <ScrollView style={{marginBottom: 200}}>
                 {catSorted.map((cat:any) => {
                     return (
                         <Link onPress={()=>{setShowBack('categories');setSelCat(cat); setTitle(cat.title);}} to='/other' style={st.category} key={cat.id}>
@@ -143,6 +143,7 @@ const style = (theme:any) => {
             textAlign: 'center',
             padding: 10,
             backgroundColor: theme.primary,
+            marginBottom: 20,
         },
         category: {
             color: theme.text,
