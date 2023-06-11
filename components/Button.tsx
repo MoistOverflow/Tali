@@ -12,15 +12,16 @@ const cstyle = (theme:any) => {
     return StyleSheet.create({
         button: {
             backgroundColor: theme.primary,
-            padding: 10,
+            padding: 12,
             alignContent: 'center',
             textAlign: 'center',
             justifyContent: 'center',
             color: theme.text,
-            margin: 10,
-            borderRadius: 5,
+            margin: 5,
+            borderRadius: 10,
         },
         text: {
+            textAlign: 'center',
             color: theme.text,
         },
     });
