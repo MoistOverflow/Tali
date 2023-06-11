@@ -26,6 +26,31 @@ export default class nasa{
         return this;
     }
 
+    async fileImport(data:any){
+        try{
+            await AsyncStorage.setItem('movies', JSON.stringify(data.movies));
+            await AsyncStorage.setItem('shows', JSON.stringify(data.shows));
+            await AsyncStorage.setItem('others', JSON.stringify(data.others));
+            await AsyncStorage.setItem('categories', JSON.stringify(data.categories));
+            return true;
+        }catch(e){
+            return false;
+        }
+    }
+
+    async fileExport(){
+        const movies = await AsyncStorage.getItem('movies');
+        const shows = await AsyncStorage.getItem('shows');
+        const others = await AsyncStorage.getItem('others');
+        const categories = await AsyncStorage.getItem('categories');
+        return {
+            movies: JSON.parse(movies || '[]'),
+            shows: JSON.parse(shows || '[]'),
+            others: JSON.parse(others || '[]'),
+            categories: JSON.parse(categories || '[]'),
+        }
+    }
+
     async insert(newData:any){
         let table:any = await AsyncStorage.getItem(this.#tableName);
         if(table){
