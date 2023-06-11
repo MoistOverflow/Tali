@@ -1,11 +1,16 @@
-import { StyleSheet, Text, View, Modal} from 'react-native';
+import { StyleSheet, Text, View, Modal, Alert} from 'react-native';
 import Button from '../components/Button';
 import { useState, useEffect } from 'react';
 import DropDownPicker from 'react-native-dropdown-picker';
 import db from '../lib/client';
+import { Platform } from 'react-native';
+import * as MediaLibrary from 'expo-media-library';
+import * as FileSystem from 'expo-file-system';
+const { StorageAccessFramework } = FileSystem;
 
 
-export default function Settings({theme, changeTheme, themeMode, clearAll}:any){
+
+export default function Settings({theme, changeTheme, themeMode, clearAll, resyncData}:any){
     const [open, setOpen] = useState(false);
     const [value, setValue] = useState(themeMode);
     const [items, setItems] = useState([
@@ -19,13 +24,47 @@ export default function Settings({theme, changeTheme, themeMode, clearAll}:any){
 
     const st = style(theme);
 
-    const test = async () => {
-        //const res = await db.from('test').insert({test: 'test'});
-        const res2 = await db.from('test').update({row: 'updated again'}).eq({'id': 1});
-        console.log(res2);
-        //const data = await AsyncStorage.getItem('test');
-        const data = await db.from('test').select().eq();
-        //console.log(data);
+    const handleExport = async () => {
+        const dataToExport = await db.fileExport()
+        const data = JSON.stringify(dataToExport);
+        // export dataToExport in json format to a file using react-native-fs
+        if (Platform.OS === 'android') {
+            const permissions = await StorageAccessFramework.requestDirectoryPermissionsAsync();
+            if (permissions.granted) {
+                // Gets SAF URI from response
+                const uri = permissions.directoryUri;
+                // Writes file to SAF URI
+                await StorageAccessFramework.createFileAsync(uri, 'tali', 'application/json').then(async (fileUri) => {
+                    await  StorageAccessFramework.writeAsStringAsync(fileUri, data, { encoding: FileSystem.EncodingType.UTF8 }).catch((err) => console.log(err))
+                })
+            }
+        }
+    };
+
+    const handleImport = async () => {
+        StorageAccessFramework.requestDirectoryPermissionsAsync().then(async (permissions) => {
+            if (permissions.granted) {
+                const uri = permissions.directoryUri;
+                const fileUri = await StorageAccessFramework.readDirectoryAsync(uri).then((res) => {
+                    for (let i = 0; i < res.length; i++) {
+                        if (res[i].endsWith('tali.json')) {
+                            return res[i];
+                        }
+                    }
+                })
+                if (fileUri) {
+                    const data = await StorageAccessFramework.readAsStringAsync(fileUri).then((res) => res);
+                    const dataToImport = JSON.parse(data);
+                    const res = await db.fileImport(dataToImport);
+                    if (res) {
+                        resyncData();
+                    } else {
+                        Alert.alert('Error importing data', 'File seems to be corrupted');
+                        clearAll();
+                    }
+                }
+            }
+        })
     }
 
 
@@ -33,7 +72,7 @@ export default function Settings({theme, changeTheme, themeMode, clearAll}:any){
 
 
     return (
-        <View style={style(theme).container}>
+        <View style={st.container}>
             <Modal
                 animationType="slide"
                 transparent={true}
@@ -51,8 +90,8 @@ export default function Settings({theme, changeTheme, themeMode, clearAll}:any){
                     </View>
                 </View>
             </Modal>
-            <View style={style(theme).row}>
-                <Text style={style(theme).droptext}>Choose Theme: </Text>
+            <View style={st.row}>
+                <Text style={st.droptext}>Choose Theme: </Text>
                 <DropDownPicker
                     open={open}
                     value={value}
@@ -60,12 +99,17 @@ export default function Settings({theme, changeTheme, themeMode, clearAll}:any){
                     setOpen={setOpen}
                     setValue={setValue}
                     setItems={setItems}
-                    style={style(theme).dropdown}
+                    style={st.dropdown}
                     theme={theme.dropDown}
                 />
             </View>
-            <Button title="clear all" theme={theme} onPress={()=>setDeleteAllModal(true)}/>
-            <Button title="test" theme={theme} onPress={test}/>
+            <View style={{...st.row, zIndex:0}}>
+                <Button theme={theme} title="Export Data" onPress={handleExport} style={{padding:30, flex:1}}/>
+                <Button theme={theme} title="Import Data" onPress={handleImport} style={{padding:30, flex:1}}/>
+            </View>
+            <View style={{...st.row, zIndex:0}}>
+                <Button theme={theme} title="Delete All Data" onPress={() => setDeleteAllModal(true)} style={{width:'100%'}}/>
+            </View>
         </View>
     )
 }
@@ -93,6 +137,7 @@ const style = (theme:any) => {
         row: {
             flexDirection: 'row',
             zIndex: 100,
+            margin: 20,
         },
         centeredView: {
             flex: 1,
