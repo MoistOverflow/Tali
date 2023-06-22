@@ -55,13 +55,23 @@ export default class nasa{
         let table:any = await AsyncStorage.getItem(this.#tableName);
         if(table){
             table = JSON.parse(table);
-            let maxId = 0;
-            table.forEach((s:any)=>{
-                if(s.id > maxId){
-                    maxId = s.id;
-                }
-            });
-            newData.id = maxId + 1;
+            console.log(newData)
+            if ('id' in newData){
+                table.forEach((s:any)=>{
+                    if(s.id === newData.id){
+                        this.error = 'Id already exists';
+                        return this
+                    }
+                });
+            }else{
+                let maxId = 0;
+                table.forEach((s:any)=>{
+                    if(s.id > maxId){
+                        maxId = s.id;
+                    }
+                });
+                newData.id = maxId + 1;
+            }
             const {data, error} = await this.#tableSchemas[this.#tableName].safeParse(newData);
             if(error){
                 this.error = error.message;
@@ -72,7 +82,9 @@ export default class nasa{
             this.data = data
             return this;
         }else{
-            newData.id = 1;
+            if (!('id' in newData)){
+                newData.id = 1;
+            }
             const {data, error} = await this.#tableSchemas[this.#tableName].safeParse(newData);
             if(error){
                 this.error = error.message;
