@@ -15,7 +15,16 @@ import TitleBar from './components/TitleBar';
 import db from './lib/client';
 
 const findTheme = async () => {
-  const theme = await AsyncStorage.getItem('theme');
+  const res = await db.from("settings").select().eq({id: 'theme'})
+  let theme = 'auto'
+  if (!res.error){
+    if (res.data.length > 0){
+      theme = res.data[0].value
+    }else{
+      const res = await db.from('settings').insert({id: 'theme', value: 'auto'})
+      console.log(res)
+    }
+  }
   if(theme === 'dark') {
     return dark;
   } else if(theme === 'light') {
@@ -35,7 +44,13 @@ const findTheme = async () => {
 }
 
 const findThemeMode = async () => {
-  const theme = await AsyncStorage.getItem('theme');
+  const res = await db.from("settings").select().eq({id:'theme'})
+  let theme = 'auto'
+  if (!res.error){
+    if (res.data.length > 0){
+      theme = res.data[0].value
+    }
+  }
   if (theme){
     return theme;
   } else {
@@ -53,7 +68,6 @@ export default function App() {
   const [selCat, setSelCat] = useState({id:0});
   const [otherCategories, setOtherCategories] = useState([]);
   const [others, setOthers] = useState([]);
-
 
 
   useEffect(() => {
@@ -97,22 +111,22 @@ export default function App() {
       case 'dark':
         setThemeMode('dark');
         setTheme(dark);
-        await AsyncStorage.setItem('theme', 'dark');
+        await db.from("settings").update({value: 'dark'}).eq({id: 'theme'})
         break;
       case 'light':
         setThemeMode('light');
         setTheme(light);
-        await AsyncStorage.setItem('theme', 'light');
+        await db.from('settings').update({value: 'light'}).eq({id: 'theme'})
         break;
       case 'solorizedDark':
         setThemeMode('solorizedDark');
         setTheme(solorizedDark);
-        await AsyncStorage.setItem('theme', 'solorizedDark');
+        await db.from('settings').update({value: 'solorizedDark'}).eq({id: 'theme'})
         break;
       case 'oled':
         setThemeMode('oled');
         setTheme(oled);
-        await AsyncStorage.setItem('theme', 'oled');
+        await db.from('settings').update({value: 'oled'}).eq({id: 'theme'})
         break;
       default:
         setThemeMode('auto');
@@ -122,7 +136,7 @@ export default function App() {
         } else {
           setTheme(light);
         }
-        await AsyncStorage.setItem('theme', "auto");
+        await db.from('settings').update({id: 'theme', value: 'auto'}).eq({id: 'theme'})
         break;
     }
   }
