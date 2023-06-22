@@ -244,6 +244,12 @@ const style = (theme:any) => {
             alignItems: 'center',
             justifyContent: 'center',
         },
+        delete: {
+            color: 'red',
+            textAlign: 'center',
+            marginTop: 10,
+        },
+        
     });
 }
 
@@ -457,8 +463,8 @@ function EditMovieModal({editMovie, setEdditMovie, update, theme, remove}:any){
                                 value={editMovie.notes}
                             />
                         </View>
-                        <View style={{...st.row, width: '90%', marginLeft: 20, justifyContent: "flex-start"}}>
-                            <Button title="delete" onPress={()=>remove(editMovie.id)} theme={theme} style={{backgroundColor: theme.danger, paddingHorizontal: 25, margin: 0}}/>
+                        <View style={{...st.row, width: '90%', marginLeft: 20, justifyContent: "center"}}>
+                            <Text style={st.delete} onLongPress={()=>remove(editMovie.id)}>long press to delete</Text>
                         </View>
                     </View>
                 </View>

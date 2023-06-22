@@ -265,6 +265,11 @@ const style = (theme:any) => {
             paddingHorizontal: 10,
             padding: 5,
         },
+        delete: {
+            color: 'red',
+            textAlign: 'center',
+            marginTop: 10,
+        },
     });
 }
 
@@ -517,8 +522,8 @@ function EditshowModal({editShow, setEditShow, update, theme, remove}:any){
                                 value={editShow.notes}
                             />
                         </View>
-                        <View style={{...st.row, width: '90%', marginLeft: 20, justifyContent: "flex-start"}}>
-                            <Button title="delete" onPress={()=>remove(editShow.id)} theme={theme} style={{backgroundColor: theme.danger, paddingHorizontal: 25, margin: 0,}}/>
+                        <View style={{...st.row, width: '90%', marginLeft: 20, justifyContent: "center"}}>
+                            <Text style={st.delete} onLongPress={()=>remove(editShow.id)}>long press to delete</Text>
                         </View>
                     </View>
                 </View>
