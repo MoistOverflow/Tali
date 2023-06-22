@@ -89,3 +89,9 @@ export const TestTableShema = z.object({
     test: z.string(),
 }).strict();
 export type TestTable = z.infer<typeof TestTableShema>;
+
+export const SettingSchema = z.object({
+    id: z.string(),
+    value: z.string().or(z.boolean().or(z.number()))
+})
+export type SettingsTable = z.infer<typeof SettingSchema>
