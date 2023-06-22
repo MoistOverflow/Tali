@@ -1,5 +1,5 @@
 import nasa from './nasa';
-import { MovieSchema, ShowSchema, TestTableShema, OtherSchema, CategorySchema} from './schemas';
+import { MovieSchema, ShowSchema, TestTableShema, OtherSchema, CategorySchema, SettingSchema} from './schemas';
 
 
 const tableSchemas = {
@@ -7,7 +7,7 @@ const tableSchemas = {
     shows: ShowSchema,
     others: OtherSchema,
     categories: CategorySchema,
-    test: TestTableShema,
+    settings: SettingSchema ,
 }
 
 
