@@ -27,13 +27,10 @@ export default function Settings({theme, changeTheme, themeMode, clearAll, resyn
     const handleExport = async () => {
         const dataToExport = await db.fileExport()
         const data = JSON.stringify(dataToExport);
-        // export dataToExport in json format to a file using react-native-fs
         if (Platform.OS === 'android') {
             const permissions = await StorageAccessFramework.requestDirectoryPermissionsAsync();
             if (permissions.granted) {
-                // Gets SAF URI from response
                 const uri = permissions.directoryUri;
-                // Writes file to SAF URI
                 await StorageAccessFramework.createFileAsync(uri, 'tali', 'application/json').then(async (fileUri) => {
                     await  StorageAccessFramework.writeAsStringAsync(fileUri, data, { encoding: FileSystem.EncodingType.UTF8 }).catch((err) => console.log(err))
                 })
