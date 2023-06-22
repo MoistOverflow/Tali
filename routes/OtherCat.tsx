@@ -58,10 +58,11 @@ export default function OtherCat({theme, otherCategories, setOtherCategories, se
     }
 
     const handleDelete = async () => {
-        const res = await db.from('categories').delete().eq({id: newCat.id});
+        let res = await db.from('categories').delete().eq({id: newCat.id});
         if (res.data) {
             setOtherCategories([...otherCategories.filter((c:any) => c.id !== newCat.id)])
         }
+        res = await db.from('others').delete().eq({category: newCat.id})
         setModalVisible(false);
         setNewCat({title: '', showEpisodes: false});
         setEditPop(false);
