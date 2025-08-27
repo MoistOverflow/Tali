@@ -16,7 +16,8 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "userInterfaceStyle": "automatic"
+      "userInterfaceStyle": "automatic",
+      "CFBundleIdentifier": "moistoverflow.com.tali"
     },
     "android": {
       "permissions": [
