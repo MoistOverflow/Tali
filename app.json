@@ -17,7 +17,8 @@
     "ios": {
       "supportsTablet": true,
       "userInterfaceStyle": "automatic",
-      "CFBundleIdentifier": "moistoverflow.com.tali"
+      "CFBundleIdentifier": "moistoverflow.com.tali",
+      "CFBundleVersion": "tali.01"
     },
     "android": {
       "permissions": [
